@@ -1,0 +1,72 @@
+{
+    "image2": {
+        "data": "hwQCAAIAAABEAAAARAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bullet"
+    },
+    "image1": {
+        "data": "hwQMAAwAAAAgIiIiIgIAACIiIiIiIgAAIiIiIiIiAAAiIiIiIiIAACIiIiIiIgAAIiIiIiIiAAAiIiIiIiIAACIiIiIiIgAAIiIiIiIiAAAiIiIiIiIAACIiIiIiIgAAICIiIiICAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_p1"
+    },
+    "image3": {
+        "data": "hwQMAAwAAACQmZmZmQkAAJmZmZmZmQAAmZmZmZmZAACZmZmZmZkAAJmZmZmZmQAAmZmZmZmZAACZmZmZmZkAAJmZmZmZmQAAmZmZmZmZAACZmZmZmZkAAJmZmZmZmQAAkJmZmZkJAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_p2"
+    },
+    "image4": {
+        "data": "hwQMAAwAAABARERERAQAAERERERERAAAREREREREAABEREREREQAAERERERERAAAREREREREAABEREREREQAAERERERERAAAREREREREAABEREREREQAAERERERERAAAQEREREQEAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_p3"
+    },
+    "image7": {
+        "data": "hwQGAAYAAACQmQkAmZmZAJmZmQCZmZkAmZmZAJCZCQA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p2"
+    },
+    "image6": {
+        "data": "hwQGAAYAAAAgIgIAIiIiACIiIgAiIiIAIiIiACAiAgA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p1"
+    },
+    "image8": {
+        "data": "hwQGAAYAAABARAQAREREAERERABEREQAREREAEBEBAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p3"
+    },
+    "image9": {
+        "data": "hwQGAAYAAABwdwcAd3d3AHd3dwB3d3cAd3d3AHB3BwA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p4"
+    },
+    "image5": {
+        "data": "hwQMAAwAAABwd3d3dwcAAHd3d3d3dwAAd3d3d3d3AAB3d3d3d3cAAHd3d3d3dwAAd3d3d3d3AAB3d3d3d3cAAHd3d3d3dwAAd3d3d3d3AAB3d3d3d3cAAHd3d3d3dwAAcHd3d3cHAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_p4"
+    },
+    "image10": {
+        "data": "hwQCAAIAAAAiAAAAIgAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_bullet_p1"
+    },
+    "image11": {
+        "data": "hwQCAAIAAACZAAAAmQAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_bullet_p2"
+    },
+    "image12": {
+        "data": "hwQCAAIAAABEAAAARAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_bullet_p3"
+    },
+    "image13": {
+        "data": "hwQCAAIAAAB3AAAAdwAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "boss_bullet_p4"
+    },
+    "*": {
+        "mimeType": "image/x-mkcd-f4",
+        "dataEncoding": "base64",
+        "namespace": "myImages"
+    }
+}
