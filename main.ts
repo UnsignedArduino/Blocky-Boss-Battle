@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const BossProjectile = SpriteKind.create()
+}
 function boss_start_phase (phase: number) {
     boss_phase = phase
     if (phase == 1) {
@@ -15,7 +18,6 @@ function boss_start_phase (phase: number) {
 function get_boss_bullet () {
     let boss_bullet_color = 0
     if (boss_bullet_color == 0) {
-        boss_index = players.indexOf(boss)
         if (boss_index == 0) {
             boss_bullet_image = assets.image`boss_bullet_p1`
         } else if (boss_index == 1) {
@@ -26,7 +28,7 @@ function get_boss_bullet () {
             boss_bullet_image = assets.image`boss_bullet_p4`
         }
     }
-    bullet = sprites.create(boss_bullet_image, SpriteKind.Projectile)
+    bullet = sprites.create(boss_bullet_image, SpriteKind.BossProjectile)
     bullet.setFlag(SpriteFlag.AutoDestroy, true)
     spriteutils.placeAngleFrom(
     bullet,
@@ -80,6 +82,11 @@ function boss_start_phase_1 () {
         }
     })
 }
+controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    if (boss_index != 1) {
+        shoot_player_bullet(1)
+    }
+})
 function create_boss (number: number) {
     if (number == 0) {
         boss = sprites.create(assets.image`boss_p1`, SpriteKind.Enemy)
@@ -98,6 +105,7 @@ function create_boss (number: number) {
     boss.setFlag(SpriteFlag.StayInScreen, true)
     boss.setPosition(scene.screenWidth() / 2, scene.screenHeight() * 0.15)
     players[number] = boss
+    boss_index = number
 }
 function boss_stop_phases () {
     boss_phase = 0
@@ -121,6 +129,40 @@ function boss_start_phase_4 () {
         }
     })
 }
+controller.player4.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    if (boss_index != 3) {
+        shoot_player_bullet(3)
+    }
+})
+controller.player1.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    if (boss_index != 0) {
+        shoot_player_bullet(0)
+    }
+})
+function shoot_player_bullet (number: number) {
+    if (number == 0) {
+        bullet = sprites.create(assets.image`player_p1_bullet`, SpriteKind.Projectile)
+    } else if (number == 1) {
+        bullet = sprites.create(assets.image`player_p2_bullet`, SpriteKind.Projectile)
+    } else if (number == 2) {
+        bullet = sprites.create(assets.image`player_p3_bullet`, SpriteKind.Projectile)
+    } else {
+        bullet = sprites.create(assets.image`player_p4_bullet`, SpriteKind.Projectile)
+    }
+    bullet.setFlag(SpriteFlag.AutoDestroy, true)
+    spriteutils.placeAngleFrom(
+    bullet,
+    0,
+    0,
+    players[number]
+    )
+    bullet.vy = -150
+}
+controller.player3.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    if (boss_index != 2) {
+        shoot_player_bullet(2)
+    }
+})
 function create_player (number: number) {
     if (number == 0) {
         a_player = sprites.create(assets.image`player_p1`, SpriteKind.Player)
@@ -158,9 +200,9 @@ function boss_start_phase_3 () {
 }
 let a_player: Sprite = null
 let in_game = false
+let boss: Sprite = null
 let bullet: Sprite = null
 let boss_bullet_image: Image = null
-let boss: Sprite = null
 let boss_index = 0
 let boss_phase = 0
 let players: Sprite[] = []

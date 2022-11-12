@@ -64,6 +64,26 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "boss_bullet_p4"
     },
+    "image14": {
+        "data": "hwQDAAMAAAAiAgAAIgIAACICAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p1_bullet"
+    },
+    "image15": {
+        "data": "hwQDAAMAAACZCQAAmQkAAJkJAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p2_bullet"
+    },
+    "image16": {
+        "data": "hwQDAAMAAABEBAAARAQAAEQEAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p3_bullet"
+    },
+    "image17": {
+        "data": "hwQDAAMAAAB3BwAAdwcAAHcHAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "player_p4_bullet"
+    },
     "*": {
         "mimeType": "image/x-mkcd-f4",
         "dataEncoding": "base64",

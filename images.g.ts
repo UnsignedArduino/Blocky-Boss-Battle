@@ -124,6 +124,30 @@ namespace myImages {
 7 7 
 7 7 
 `;
+            case "image14":
+            case "player_p1_bullet":return img`
+2 2 2 
+2 2 2 
+2 2 2 
+`;
+            case "image15":
+            case "player_p2_bullet":return img`
+9 9 9 
+9 9 9 
+9 9 9 
+`;
+            case "image16":
+            case "player_p3_bullet":return img`
+4 4 4 
+4 4 4 
+4 4 4 
+`;
+            case "image17":
+            case "player_p4_bullet":return img`
+7 7 7 
+7 7 7 
+7 7 7 
+`;
         }
         return null;
     })
