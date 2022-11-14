@@ -47,7 +47,7 @@ function boss_start_phase_2 () {
                     for (let index2 = 0; index2 <= 17; index2++) {
                         spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index2 + 360 / 18 / 3 * (2 - offset)), 60)
                     }
-                    pause(100)
+                    pause(200)
                     if (boss_phase != 2) {
                         return
                     }
@@ -60,6 +60,10 @@ function boss_start_phase_2 () {
         }
     })
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.BossProjectile, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.Health, sprite).value += -1
+    otherSprite.destroy()
+})
 function boss_start_phase_1 () {
     boss_phase = 1
     timer.background(function () {
@@ -69,7 +73,7 @@ function boss_start_phase_1 () {
                     for (let index4 = 0; index4 <= 17; index4++) {
                         spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index4 + 360 / 18 / 3 * offset2), 60)
                     }
-                    pause(100)
+                    pause(200)
                     if (boss_phase != 1) {
                         return
                     }
@@ -121,7 +125,7 @@ function boss_start_phase_4 () {
                 for (let index5 = 0; index5 <= 11; index5++) {
                     spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index5 + (90 - offset3) * (360 / 90)), 80)
                 }
-                pause(200)
+                pause(250)
                 if (boss_phase != 4) {
                     return
                 }
@@ -129,6 +133,9 @@ function boss_start_phase_4 () {
         }
     })
 }
+statusbars.onZero(StatusBarKind.Health, function (status) {
+    status.spriteAttachedTo().destroy()
+})
 controller.player4.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
     if (boss_index != 3) {
         shoot_player_bullet(3)
@@ -164,22 +171,31 @@ controller.player3.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
     }
 })
 function create_player (number: number) {
+    a_statusbar = statusbars.create(10, 1, StatusBarKind.Health)
     if (number == 0) {
         a_player = sprites.create(assets.image`player_p1`, SpriteKind.Player)
+        a_statusbar.setColor(2, 12)
         controller.player1.moveSprite(a_player, 50, 50)
     } else if (number == 1) {
         a_player = sprites.create(assets.image`player_p2`, SpriteKind.Player)
+        a_statusbar.setColor(9, 12)
         controller.player2.moveSprite(a_player, 50, 50)
     } else if (number == 2) {
         a_player = sprites.create(assets.image`player_p3`, SpriteKind.Player)
+        a_statusbar.setColor(4, 12)
         controller.player3.moveSprite(a_player, 50, 50)
     } else {
         a_player = sprites.create(assets.image`player_p4`, SpriteKind.Player)
+        a_statusbar.setColor(7, 12)
         controller.player4.moveSprite(a_player, 50, 50)
     }
     a_player.setPosition(scene.screenWidth() / 5 * (number + 1), scene.screenHeight() * 0.85)
     a_player.z = 1
     a_player.setFlag(SpriteFlag.StayInScreen, true)
+    a_statusbar.max = 20
+    a_statusbar.value = a_statusbar.value
+    a_statusbar.positionDirection(CollisionDirection.Top)
+    a_statusbar.attachToSprite(a_player, 2, 0)
     players[number] = a_player
 }
 function boss_start_phase_3 () {
@@ -190,7 +206,7 @@ function boss_start_phase_3 () {
                 for (let index6 = 0; index6 <= 11; index6++) {
                     spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index6 + offset4 * (360 / 90)), 80)
                 }
-                pause(200)
+                pause(250)
                 if (boss_phase != 3) {
                     return
                 }
@@ -199,6 +215,7 @@ function boss_start_phase_3 () {
     })
 }
 let a_player: Sprite = null
+let a_statusbar: StatusBarSprite = null
 let in_game = false
 let boss: Sprite = null
 let bullet: Sprite = null
@@ -213,4 +230,4 @@ create_player(0)
 create_player(2)
 create_player(3)
 create_boss(1)
-boss_start_phase(1)
+boss_start_phase(3)
