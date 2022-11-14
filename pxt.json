@@ -1,5 +1,5 @@
 {
-    "name": "Blocky Boss Battle",
+    "name": "Blocky Boss Battle - players can shoot",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -21,7 +21,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.11.36",
+        "target": "1.11.37",
         "targetId": "arcade"
     },
     "supportedTargets": [

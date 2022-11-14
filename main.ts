@@ -44,8 +44,8 @@ function boss_start_phase_2 () {
         while (boss_phase == 2) {
             for (let index = 0; index < 3; index++) {
                 for (let offset = 0; offset <= 2; offset++) {
-                    for (let index = 0; index <= 17; index++) {
-                        spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + 360 / 18 / 3 * (2 - offset)), 60)
+                    for (let index2 = 0; index2 <= 17; index2++) {
+                        spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index2 + 360 / 18 / 3 * (2 - offset)), 60)
                     }
                     pause(100)
                     if (boss_phase != 2) {
@@ -65,9 +65,9 @@ function boss_start_phase_1 () {
     timer.background(function () {
         while (boss_phase == 1) {
             for (let index = 0; index < 3; index++) {
-                for (let offset = 0; offset <= 2; offset++) {
-                    for (let index = 0; index <= 17; index++) {
-                        spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + 360 / 18 / 3 * offset), 60)
+                for (let offset2 = 0; offset2 <= 2; offset2++) {
+                    for (let index4 = 0; index4 <= 17; index4++) {
+                        spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index4 + 360 / 18 / 3 * offset2), 60)
                     }
                     pause(100)
                     if (boss_phase != 1) {
@@ -117,9 +117,9 @@ function boss_start_phase_4 () {
     boss_phase = 4
     timer.background(function () {
         while (boss_phase == 4) {
-            for (let offset = 0; offset <= 90; offset++) {
-                for (let index = 0; index <= 11; index++) {
-                    spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + (90 - offset) * (360 / 90)), 80)
+            for (let offset3 = 0; offset3 <= 90; offset3++) {
+                for (let index5 = 0; index5 <= 11; index5++) {
+                    spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index5 + (90 - offset3) * (360 / 90)), 80)
                 }
                 pause(200)
                 if (boss_phase != 4) {
@@ -186,9 +186,9 @@ function boss_start_phase_3 () {
     boss_phase = 3
     timer.background(function () {
         while (boss_phase == 3) {
-            for (let offset = 0; offset <= 90; offset++) {
-                for (let index = 0; index <= 11; index++) {
-                    spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + offset * (360 / 90)), 80)
+            for (let offset4 = 0; offset4 <= 90; offset4++) {
+                for (let index6 = 0; index6 <= 11; index6++) {
+                    spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index6 + offset4 * (360 / 90)), 80)
                 }
                 pause(200)
                 if (boss_phase != 3) {
@@ -207,8 +207,7 @@ let boss_index = 0
 let boss_phase = 0
 let players: Sprite[] = []
 stats.turnStats(true)
-players = [
-]
+players = []
 start_game()
 create_player(0)
 create_player(2)
