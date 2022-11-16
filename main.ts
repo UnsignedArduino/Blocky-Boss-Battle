@@ -92,25 +92,38 @@ controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
     }
 })
 function create_boss (number: number) {
+    a_statusbar = statusbars.create(30, 1, StatusBarKind.Health)
     if (number == 0) {
         boss = sprites.create(assets.image`boss_p1`, SpriteKind.Enemy)
         controller.player1.moveSprite(boss, 20, 20)
+        a_statusbar.setColor(2, 12)
     } else if (number == 1) {
         boss = sprites.create(assets.image`boss_p2`, SpriteKind.Enemy)
         controller.player2.moveSprite(boss, 20, 20)
+        a_statusbar.setColor(9, 12)
     } else if (number == 2) {
         boss = sprites.create(assets.image`boss_p3`, SpriteKind.Enemy)
         controller.player3.moveSprite(boss, 20, 20)
+        a_statusbar.setColor(4, 12)
     } else {
         boss = sprites.create(assets.image`boss_p4`, SpriteKind.Enemy)
         controller.player4.moveSprite(boss, 20, 20)
+        a_statusbar.setColor(7, 12)
     }
     boss.z = 1
     boss.setFlag(SpriteFlag.StayInScreen, true)
     boss.setPosition(scene.screenWidth() / 2, scene.screenHeight() * 0.15)
     players[number] = boss
     boss_index = number
+    a_statusbar.max = 100
+    a_statusbar.value = a_statusbar.value
+    a_statusbar.positionDirection(CollisionDirection.Top)
+    a_statusbar.attachToSprite(boss, 2, 0)
 }
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
+    statusbars.getStatusBarAttachedTo(StatusBarKind.Health, sprite).value += -1
+    otherSprite.destroy()
+})
 function boss_stop_phases () {
     boss_phase = 0
 }
@@ -170,6 +183,9 @@ controller.player3.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Press
         shoot_player_bullet(2)
     }
 })
+sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
+    boss_stop_phases()
+})
 function create_player (number: number) {
     a_statusbar = statusbars.create(10, 1, StatusBarKind.Health)
     if (number == 0) {
@@ -215,8 +231,8 @@ function boss_start_phase_3 () {
     })
 }
 let a_player: Sprite = null
-let a_statusbar: StatusBarSprite = null
 let in_game = false
+let a_statusbar: StatusBarSprite = null
 let boss: Sprite = null
 let bullet: Sprite = null
 let boss_bullet_image: Image = null
