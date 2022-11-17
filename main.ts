@@ -3,6 +3,7 @@ namespace SpriteKind {
 }
 function boss_start_phase (phase: number) {
     boss_phase = phase
+    boss_stop_phases()
     if (phase == 1) {
         boss_start_phase_1()
     } else if (phase == 2) {
@@ -11,8 +12,6 @@ function boss_start_phase (phase: number) {
         boss_start_phase_3()
     } else if (phase == 4) {
         boss_start_phase_4()
-    } else {
-        boss_stop_phases()
     }
 }
 function get_boss_bullet () {
@@ -119,6 +118,13 @@ function create_boss (number: number) {
     a_statusbar.value = a_statusbar.value
     a_statusbar.positionDirection(CollisionDirection.Top)
     a_statusbar.attachToSprite(boss, 2, 0)
+    a_statusbar = statusbars.create(30, 1, StatusBarKind.Energy)
+    a_statusbar.setColor(3, 12)
+    a_statusbar.max = 1000
+    a_statusbar.value = 0
+    a_statusbar.positionDirection(CollisionDirection.Top)
+    a_statusbar.setStatusBarFlag(StatusBarFlag.ConstrainAssignedValue, true)
+    a_statusbar.attachToSprite(boss, 4, 0)
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.Health, sprite).value += -1
@@ -126,6 +132,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
 })
 function boss_stop_phases () {
     boss_phase = 0
+    boss_last_phase_switch = game.runtime() + a_statusbar.max
 }
 function start_game () {
     in_game = true
@@ -214,8 +221,8 @@ function create_player (number: number) {
     a_statusbar.attachToSprite(a_player, 2, 0)
     players[number] = a_player
 }
-function align_status_bar (sbar_in_list: StatusBarSprite[]) {
-    if (sbar_in_list[0].spriteAttachedTo().top < 4) {
+function align_status_bar (sbar_in_list: StatusBarSprite[], top_limit: number) {
+    if (sbar_in_list[0].spriteAttachedTo().top < top_limit) {
         sbar_in_list[0].positionDirection(CollisionDirection.Bottom)
     } else {
         sbar_in_list[0].positionDirection(CollisionDirection.Top)
@@ -239,6 +246,7 @@ function boss_start_phase_3 () {
 }
 let a_player: Sprite = null
 let in_game = false
+let boss_last_phase_switch = 0
 let a_statusbar: StatusBarSprite = null
 let boss: Sprite = null
 let bullet: Sprite = null
@@ -259,9 +267,17 @@ game.onUpdate(function () {
         if (boss.y > scene.screenHeight() * (1 / 3)) {
             boss.y = scene.screenHeight() * (1 / 3)
         }
-        align_status_bar([statusbars.getStatusBarAttachedTo(StatusBarKind.Health, boss)])
+        align_status_bar([statusbars.getStatusBarAttachedTo(StatusBarKind.Health, boss)], 6)
+        a_statusbar = statusbars.getStatusBarAttachedTo(StatusBarKind.Energy, boss)
+        align_status_bar([a_statusbar], 6)
+        a_statusbar.value = a_statusbar.max - (game.runtime() - boss_last_phase_switch)
+        if (a_statusbar.value == 0) {
+            a_statusbar.setColor(3, 0)
+        } else {
+            a_statusbar.setColor(3, 12)
+        }
         for (let value of sprites.allOfKind(SpriteKind.Player)) {
-            align_status_bar([statusbars.getStatusBarAttachedTo(StatusBarKind.Health, value)])
+            align_status_bar([statusbars.getStatusBarAttachedTo(StatusBarKind.Health, value)], 4)
         }
     }
 })
