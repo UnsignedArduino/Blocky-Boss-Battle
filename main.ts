@@ -1,19 +1,30 @@
 namespace SpriteKind {
     export const BossProjectile = SpriteKind.create()
 }
-function boss_start_phase (phase: number) {
-    boss_phase = phase
-    boss_stop_phases()
-    if (phase == 1) {
-        boss_start_phase_1()
-    } else if (phase == 2) {
-        boss_start_phase_2()
-    } else if (phase == 3) {
-        boss_start_phase_3()
-    } else if (phase == 4) {
-        boss_start_phase_4()
+function handle_a (player2: number) {
+    if (boss_index == player2) {
+        timer.throttle("boss_change_phase", statusbars.getStatusBarAttachedTo(StatusBarKind.Health, boss).max, function () {
+            boss_last_phase = boss_phase
+            boss_phase = -1
+            boss_last_phase_switch = game.runtime()
+            timer.after(1000, function () {
+                boss_phase = boss_last_phase
+                boss_phase += 1
+                if (boss_phase > 3) {
+                    boss_phase = 0
+                }
+            })
+        })
+    } else {
+        shoot_player_bullet(player2)
     }
 }
+controller.player3.onButtonEvent(ControllerButton.B, ControllerButtonEvent.Pressed, function () {
+    handle_b(2)
+})
+controller.player2.onButtonEvent(ControllerButton.B, ControllerButtonEvent.Pressed, function () {
+    handle_b(1)
+})
 function get_boss_bullet () {
     let boss_bullet_color = 0
     if (boss_bullet_color == 0) {
@@ -37,58 +48,26 @@ function get_boss_bullet () {
     )
     return bullet
 }
-function boss_start_phase_2 () {
-    boss_phase = 2
-    timer.background(function () {
-        while (boss_phase == 2) {
-            for (let index = 0; index < 3; index++) {
-                for (let offset = 0; offset <= 2; offset++) {
-                    for (let index = 0; index <= 17; index++) {
-                        spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + 360 / 18 / 3 * (2 - offset)), 60)
-                    }
-                    pause(200)
-                    if (boss_phase != 2) {
-                        return
-                    }
-                }
-                if (boss_phase != 2) {
-                    return
-                }
-            }
-            pause(2000)
+controller.player4.onButtonEvent(ControllerButton.B, ControllerButtonEvent.Pressed, function () {
+    handle_b(3)
+})
+function boss_handle_phase_2 () {
+    for (let offset = 0; offset <= 90; offset++) {
+        for (let index = 0; index <= 11; index++) {
+            spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + offset * (360 / 90)), 80)
         }
-    })
+        pause(250)
+        if (boss_phase != 2) {
+            return
+        }
+    }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.BossProjectile, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.Health, sprite).value += -1
     otherSprite.destroy()
 })
-function boss_start_phase_1 () {
-    boss_phase = 1
-    timer.background(function () {
-        while (boss_phase == 1) {
-            for (let index = 0; index < 3; index++) {
-                for (let offset = 0; offset <= 2; offset++) {
-                    for (let index = 0; index <= 17; index++) {
-                        spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + 360 / 18 / 3 * offset), 60)
-                    }
-                    pause(200)
-                    if (boss_phase != 1) {
-                        return
-                    }
-                }
-                if (boss_phase != 1) {
-                    return
-                }
-            }
-            pause(2000)
-        }
-    })
-}
 controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
-    if (boss_index != 1) {
-        shoot_player_bullet(1)
-    }
+    handle_a(1)
 })
 function create_boss (number: number) {
     a_statusbar = statusbars.create(30, 1, StatusBarKind.Health)
@@ -119,17 +98,67 @@ function create_boss (number: number) {
     a_statusbar.positionDirection(CollisionDirection.Top)
     a_statusbar.attachToSprite(boss, 2, 0)
     a_statusbar = statusbars.create(30, 1, StatusBarKind.Energy)
-    a_statusbar.setColor(3, 12)
+    a_statusbar.setColor(3, 0)
     a_statusbar.max = 1000
     a_statusbar.value = 0
     a_statusbar.positionDirection(CollisionDirection.Top)
     a_statusbar.setStatusBarFlag(StatusBarFlag.ConstrainAssignedValue, true)
     a_statusbar.attachToSprite(boss, 4, 0)
 }
+function boss_handle_phase_0 () {
+    for (let index = 0; index < 3; index++) {
+        for (let offset = 0; offset <= 2; offset++) {
+            for (let index = 0; index <= 17; index++) {
+                spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + 360 / 18 / 3 * offset), 60)
+            }
+            pause(200)
+            if (boss_phase != 0) {
+                return
+            }
+        }
+        if (boss_phase != 0) {
+            return
+        }
+    }
+    pause(2000)
+}
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     statusbars.getStatusBarAttachedTo(StatusBarKind.Health, sprite).value += -1
     otherSprite.destroy()
 })
+function handle_b (player2: number) {
+    if (boss_index == player2) {
+        timer.throttle("boss_change_phase", statusbars.getStatusBarAttachedTo(StatusBarKind.Health, boss).max, function () {
+            boss_last_phase = boss_phase
+            boss_phase = -1
+            boss_last_phase_switch = game.runtime()
+            timer.after(1000, function () {
+                boss_phase = boss_last_phase
+                boss_phase += -1
+                if (boss_phase < 0) {
+                    boss_phase = 3
+                }
+            })
+        })
+    }
+}
+function boss_handle_phase_1 () {
+    for (let index = 0; index < 3; index++) {
+        for (let offset = 0; offset <= 2; offset++) {
+            for (let index = 0; index <= 17; index++) {
+                spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + 360 / 18 / 3 * (2 - offset)), 60)
+            }
+            pause(200)
+            if (boss_phase != 1) {
+                return
+            }
+        }
+        if (boss_phase != 1) {
+            return
+        }
+    }
+    pause(2000)
+}
 function boss_stop_phases () {
     boss_phase = 0
     boss_last_phase_switch = game.runtime() + a_statusbar.max
@@ -137,34 +166,37 @@ function boss_stop_phases () {
 function start_game () {
     in_game = true
 }
-function boss_start_phase_4 () {
-    boss_phase = 4
-    timer.background(function () {
-        while (boss_phase == 4) {
-            for (let offset = 0; offset <= 90; offset++) {
-                for (let index = 0; index <= 11; index++) {
-                    spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + (90 - offset) * (360 / 90)), 80)
-                }
-                pause(250)
-                if (boss_phase != 4) {
-                    return
-                }
-            }
-        }
-    })
-}
 statusbars.onZero(StatusBarKind.Health, function (status) {
     status.spriteAttachedTo().destroy()
 })
-controller.player4.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
-    if (boss_index != 3) {
-        shoot_player_bullet(3)
+function boss_handle_phase (phase: number) {
+    boss_phase = phase
+    if (phase == 0) {
+        boss_handle_phase_0()
+    } else if (phase == 1) {
+        boss_handle_phase_1()
+    } else if (phase == 2) {
+        boss_handle_phase_2()
+    } else if (phase == 3) {
+        boss_handle_phase_3()
     }
+}
+function boss_handle_phase_3 () {
+    for (let offset = 0; offset <= 90; offset++) {
+        for (let index = 0; index <= 11; index++) {
+            spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + (90 - offset) * (360 / 90)), 80)
+        }
+        pause(250)
+        if (boss_phase != 3) {
+            return
+        }
+    }
+}
+controller.player4.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    handle_a(3)
 })
 controller.player1.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
-    if (boss_index != 0) {
-        shoot_player_bullet(0)
-    }
+    handle_a(0)
 })
 function shoot_player_bullet (number: number) {
     if (number == 0) {
@@ -186,12 +218,13 @@ function shoot_player_bullet (number: number) {
     bullet.vy = -150
 }
 controller.player3.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
-    if (boss_index != 2) {
-        shoot_player_bullet(2)
-    }
+    handle_a(2)
 })
 sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
     boss_stop_phases()
+})
+controller.player1.onButtonEvent(ControllerButton.B, ControllerButtonEvent.Pressed, function () {
+    handle_b(0)
 })
 function create_player (number: number) {
     a_statusbar = statusbars.create(10, 1, StatusBarKind.Health)
@@ -228,29 +261,14 @@ function align_status_bar (sbar_in_list: StatusBarSprite[], top_limit: number) {
         sbar_in_list[0].positionDirection(CollisionDirection.Top)
     }
 }
-function boss_start_phase_3 () {
-    boss_phase = 3
-    timer.background(function () {
-        while (boss_phase == 3) {
-            for (let offset = 0; offset <= 90; offset++) {
-                for (let index = 0; index <= 11; index++) {
-                    spriteutils.setVelocityAtAngle(get_boss_bullet(), spriteutils.degreesToRadians(360 / 12 * index + offset * (360 / 90)), 80)
-                }
-                pause(250)
-                if (boss_phase != 3) {
-                    return
-                }
-            }
-        }
-    })
-}
 let a_player: Sprite = null
 let in_game = false
-let boss_last_phase_switch = 0
 let a_statusbar: StatusBarSprite = null
-let boss: Sprite = null
 let bullet: Sprite = null
 let boss_bullet_image: Image = null
+let boss_last_phase_switch = 0
+let boss_last_phase = 0
+let boss: Sprite = null
 let boss_index = 0
 let boss_phase = 0
 let players: Sprite[] = []
@@ -261,7 +279,7 @@ create_player(0)
 create_player(2)
 create_player(3)
 create_boss(1)
-boss_start_phase(1)
+boss_phase = 0
 game.onUpdate(function () {
     if (!(spriteutils.isDestroyed(boss))) {
         if (boss.y > scene.screenHeight() * (1 / 3)) {
@@ -278,6 +296,13 @@ game.onUpdate(function () {
         }
         for (let value of sprites.allOfKind(SpriteKind.Player)) {
             align_status_bar([statusbars.getStatusBarAttachedTo(StatusBarKind.Health, value)], 4)
+        }
+    }
+})
+forever(function () {
+    if (!(spriteutils.isDestroyed(boss))) {
+        if (boss_phase >= 0) {
+            boss_handle_phase(boss_phase)
         }
     }
 })
