@@ -246,4 +246,11 @@ create_player(0)
 create_player(2)
 create_player(3)
 create_boss(1)
-boss_start_phase(3)
+boss_start_phase(1)
+game.onUpdate(function () {
+    if (!(spriteutils.isDestroyed(boss))) {
+        if (boss.y > scene.screenHeight() * (1 / 3)) {
+            boss.y = scene.screenHeight() * (1 / 3)
+        }
+    }
+})
