@@ -214,6 +214,13 @@ function create_player (number: number) {
     a_statusbar.attachToSprite(a_player, 2, 0)
     players[number] = a_player
 }
+function align_status_bar (sbar_in_list: StatusBarSprite[]) {
+    if (sbar_in_list[0].spriteAttachedTo().top < 4) {
+        sbar_in_list[0].positionDirection(CollisionDirection.Bottom)
+    } else {
+        sbar_in_list[0].positionDirection(CollisionDirection.Top)
+    }
+}
 function boss_start_phase_3 () {
     boss_phase = 3
     timer.background(function () {
@@ -251,6 +258,10 @@ game.onUpdate(function () {
     if (!(spriteutils.isDestroyed(boss))) {
         if (boss.y > scene.screenHeight() * (1 / 3)) {
             boss.y = scene.screenHeight() * (1 / 3)
+        }
+        align_status_bar([statusbars.getStatusBarAttachedTo(StatusBarKind.Health, boss)])
+        for (let value of sprites.allOfKind(SpriteKind.Player)) {
+            align_status_bar([statusbars.getStatusBarAttachedTo(StatusBarKind.Health, value)])
         }
     }
 })
